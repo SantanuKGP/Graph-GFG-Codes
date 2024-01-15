@@ -1,48 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 /*
-Detecting cycle in Undirected Graph
-*/
-class UndirectedGraph{
-
-public:
-    // nodes are numbered as 0, 1, ..., V-1
-    // adj is adjacency list, where adj[i] contains all connecting edges
-    // Checks whether graph has cycle or not
-    // return true if it has cycle, else return false
-    bool hasCycle(int V, vector<int> adj[]){
-        // BFS based solution
-        vector<int> isVisited(V, 0);
-        vector<int> parent(V, -1);
-        queue<int> q;
-        for(int i=0;i<V;i++){
-            if(isVisited[i])
-                continue;
-            q.push(i);
-            while (!q.empty())
-            {
-                int ele = q.front();
-                q.pop();
-                for(int j: adj[ele]){
-                    // starting index has no parent
-                    // store parent node for rest
-                    if(i!=j && parent[j]==-1)
-                        parent[j]=ele;
-                    if(isVisited[j]==1 && parent[ele]!=j)
-                        return true;
-                    if(!isVisited[j])
-                        q.push(j);
-
-                }
-                isVisited[ele] = 1;
-            }
-            
-        }
-        return false;
-    }
-};
-
-/*
 Detecting cycle in Directed Graph
 */
 class DirectedGraph{
@@ -119,14 +77,12 @@ public:
 
     }
 };
-
-
-
 int main(){
+
     // created example for undirected graph
     cout<<"Testing for undirected graph\n";
     // No of testcases
-    int t = 1;
+    int t = 0;
     // Collection of number of nodes
     vector<int> vList = {};
     // Collection of number of edges
@@ -137,9 +93,10 @@ int main(){
     vector<vector<int>> edges = {};
 
     // Create graph
-    UndirectedGraph ugraph;
-    int start = 0,end, success=0;
+    DirectedGraph graph;
+    int start = 0,end, success=0, success_=0;
     string failed = "";
+    string failed_ = "";
     for(int i=0;i<t;i++){
         end = start+ eList[i];
         // Adjacency list
@@ -148,9 +105,8 @@ int main(){
             int u = edges[j][0];
             int v = edges[j][1];
             adj[u].push_back(v);
-            adj[v].push_back(u);
         }
-        int res = ugraph.hasCycle(vList[i], adj);
+        int res = graph.hasCycle(vList[i], adj);
         if(answers[i]==res){
             cout<<" Testcase-"<<(i+1)<<": Passed";
             success += 1;
@@ -159,15 +115,26 @@ int main(){
             cout<<" Testcase-"<<(i+1)<<": Failed";
             failed = failed + " "+ to_string(i+1);
         }
+        res = graph.hasCycleBfs(vList[i], adj);
+        if(answers[i]==res){
+            cout<<" Testcase-"<<(i+1)<<": Passed";
+            success_ += 1;
+        }
+        else{
+            cout<<" Testcase-"<<(i+1)<<": Failed";
+            failed_ = failed_ + " "+ to_string(i+1);
+        }
         
         start = end;
     }
+    cout<<"Result for DFS traversal:\n";
     cout<< (success)<<"/"<< t <<" Testcases passed.\n";
     cout<< "Failed testcases:"<< failed <<"\n";
+    cout<<"Result for BFS traversal:\n";
+    cout<< (success_)<<"/"<< t <<" Testcases passed.\n";
+    cout<< "Failed testcases:"<< failed_ <<"\n";
 
-    // created example for Directed graph
-    cout<<"Testing for directed graph\n";
+
 
     return 0;
 }
-
