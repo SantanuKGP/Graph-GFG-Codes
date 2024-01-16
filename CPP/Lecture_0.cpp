@@ -42,99 +42,25 @@ public:
     }
 };
 
-/*
-Detecting cycle in Directed Graph
-*/
-class DirectedGraph{
-
-public:
-    // nodes are numbered as 0, 1, ..., V-1
-    // adj is adjacency list, where adj[i] contains all connecting edges
-    // Checks whether graph has cycle or not
-    // return true if it has cycle, else return false
-    bool hasCycle(int V, vector<int> adj[]){
-        
-        // Dfs based solution
-        
-        vector<int> isVisited(V, 0);
-
-        for(int i=0;i<V;i++){
-            if(isVisited[i]==0 && dfs(i, isVisited, adj))
-                return true;
-        }
-
-        return false;
-    }
-
-private:
-    bool dfs(int source, vector<int> &isVisited, vector<int> adj[]){
-        isVisited[source] = 1;
-        for(int i: adj[source]){
-            if(isVisited[i]==1) 
-                return true;
-            if(isVisited[i]==0 && dfs(i, isVisited, adj))
-                return true;
-        }
-        isVisited[source] = 2;
-        return false;
-    }
-public:
-    bool hasCycleBfs(int V, vector<int> adj[]){
-        // Kahn' BFS based algorithm
-
-        // count the incoming nodes for each node to detect the source
-        vector<int> incoming_nodes(V,0);
-        for(int i=0;i<V;i++){
-            for(int j: adj[i]){
-                incoming_nodes[j]++;
-            }
-        }
-
-        // BFS traversal
-        queue<int> q;
-        // push the source node to queue
-        for(int i=0;i<V;i++){
-            if(!incoming_nodes[i])
-                q.push(i);
-        }
-        // traverse
-        // count the number of loops, it executes
-        int count = 0;
-        // closest depency near source will be zero first.
-        while(!q.empty()){
-            int ele = q.front();
-            for(int i: adj[ele]){
-                incoming_nodes[i]--;
-                // add the node to queue
-                if(!incoming_nodes[i])
-                    q.push(i);
-            }
-            q.pop();
-            // count the number of node traversal
-            count++;
-        }
-
-        // if count < V, it has cycle, because for that case loop will stop first
-        return count<V;
-
-    }
-};
-
-
 
 int main(){
     // created example for undirected graph
-    cout<<"Testing for undirected graph\n";
+    cout<<"==========================================================================\n";
+    cout<<"Testing for detecting cycles in undirected graph\n";
+    cout<<"==========================================================================\n";
     // No of testcases
     int t = 1;
     // Collection of number of nodes
-    vector<int> vList = {};
+    vector<int> vList = {3,};
     // Collection of number of edges
-    vector<int> eList = {};
+    vector<int> eList = {2,};
     // Collection of expected answers
-    vector<int> answers = {};
+    vector<int> answers = {0,};
     // Collection of edges
-    vector<vector<int>> edges = {};
+    vector<vector<int>> edges = {
+        // test case 1
+        {1,2},{2,3},
+    };
 
     // Create graph
     UndirectedGraph ugraph;
@@ -152,22 +78,22 @@ int main(){
         }
         int res = ugraph.hasCycle(vList[i], adj);
         if(answers[i]==res){
-            cout<<" Testcase-"<<(i+1)<<": Passed";
+            cout<<"Testcase "<<(i+1)<<": Passed\n";
             success += 1;
         }
         else{
-            cout<<" Testcase-"<<(i+1)<<": Failed";
+            cout<<"Testcase "<<(i+1)<<": Failed\n";
             failed = failed + " "+ to_string(i+1);
         }
         
         start = end;
     }
+    cout<<"==========================================================================\n";
+    cout<<"Result: \n";
     cout<< (success)<<"/"<< t <<" Testcases passed.\n";
-    cout<< "Failed testcases:"<< failed <<"\n";
-
-    // created example for Directed graph
-    cout<<"Testing for directed graph\n";
-
+    if(failed!="")
+        cout<< "Failed testcases:"<< failed <<"\n";
+    cout<<"==========================================================================\n";
     return 0;
 }
 

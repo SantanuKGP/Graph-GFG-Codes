@@ -79,18 +79,25 @@ public:
 };
 int main(){
 
-    // created example for undirected graph
-    cout<<"Testing for undirected graph\n";
+    // created example for directed graph
+    cout<<"==========================================================================\n";
+    cout<<"Testing for detecting cycles in directed graph\n";
+    cout<<"==========================================================================\n";
     // No of testcases
-    int t = 0;
+    int t = 2;
     // Collection of number of nodes
-    vector<int> vList = {};
+    vector<int> vList = {3, 5, };
     // Collection of number of edges
-    vector<int> eList = {};
+    vector<int> eList = {2, 5, };
     // Collection of expected answers
-    vector<int> answers = {};
+    vector<int> answers = {0, 0, };
     // Collection of edges
-    vector<vector<int>> edges = {};
+    vector<vector<int>> edges = {
+        // Testcase-1
+        {0,1},{2,1},
+        // Testcase-2
+        {0,2}, {0,3},{3,2},{0,4},{2,4},
+    };
 
     // Create graph
     DirectedGraph graph;
@@ -108,33 +115,34 @@ int main(){
         }
         int res = graph.hasCycle(vList[i], adj);
         if(answers[i]==res){
-            cout<<" Testcase-"<<(i+1)<<": Passed";
+            cout<<"Testcase-"<<(i+1)<<": Passed\n";
             success += 1;
         }
         else{
-            cout<<" Testcase-"<<(i+1)<<": Failed";
+            cout<<"Testcase-"<<(i+1)<<": Failed\n";
             failed = failed + " "+ to_string(i+1);
         }
         res = graph.hasCycleBfs(vList[i], adj);
         if(answers[i]==res){
-            cout<<" Testcase-"<<(i+1)<<": Passed";
+            cout<<"Testcase-"<<(i+1)<<": Passed\n";
             success_ += 1;
         }
         else{
-            cout<<" Testcase-"<<(i+1)<<": Failed";
+            cout<<"Testcase-"<<(i+1)<<": Failed\n";
             failed_ = failed_ + " "+ to_string(i+1);
         }
         
         start = end;
     }
+    cout<<"==========================================================================\n";
     cout<<"Result for DFS traversal:\n";
     cout<< (success)<<"/"<< t <<" Testcases passed.\n";
     cout<< "Failed testcases:"<< failed <<"\n";
+    cout<<"==========================================================================\n";
     cout<<"Result for BFS traversal:\n";
     cout<< (success_)<<"/"<< t <<" Testcases passed.\n";
     cout<< "Failed testcases:"<< failed_ <<"\n";
-
-
+    cout<<"==========================================================================\n";
 
     return 0;
 }
